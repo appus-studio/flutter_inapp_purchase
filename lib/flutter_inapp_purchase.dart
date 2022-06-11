@@ -548,7 +548,10 @@ class FlutterInappPurchase {
         Duration difference =
             DateTime.now().difference(purchase.transactionDate!);
         if (difference.inMinutes <= (duration + grace).inMinutes &&
-            purchase.productId == sku) return true;
+            purchase.productId == sku &&
+            (purchase.transactionStateIOS == TransactionState.purchased ||
+                purchase.transactionStateIOS == TransactionState.restored))
+          return true;
       }
 
       return false;
@@ -557,7 +560,13 @@ class FlutterInappPurchase {
       var purchases = purchasesNullable ?? [];
 
       for (var purchase in purchases) {
-        if (purchase.productId == sku) return true;
+        Duration difference =
+            DateTime.now().difference(purchase.transactionDate!);
+
+        if (difference.inMinutes <= (duration + grace).inMinutes &&
+            purchase.productId == sku &&
+            purchase.purchaseStateAndroid == PurchaseState.purchased)
+          return true;
       }
 
       return false;
