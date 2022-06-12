@@ -560,7 +560,9 @@ class FlutterInappPurchase {
       var purchases = purchasesNullable ?? [];
 
       for (var purchase in purchases) {
-        if (purchase.productId == sku) return true;
+        if (purchase.productId == sku &&
+            purchase.purchaseStateAndroid == PurchaseState.purchased)
+          return true;
       }
 
       return false;
