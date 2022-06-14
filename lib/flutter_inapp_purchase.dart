@@ -560,7 +560,13 @@ class FlutterInappPurchase {
       var purchases = purchasesNullable ?? [];
 
       for (var purchase in purchases) {
-        if (purchase.productId == sku &&
+        Duration difference = Duration.zero;
+        if (purchase.transactionDate != null) {
+          difference = DateTime.now().difference(purchase.transactionDate!);
+        }
+
+        if (difference.inMinutes <= (duration + grace).inMinutes &&
+            purchase.productId == sku &&
             purchase.purchaseStateAndroid == PurchaseState.purchased)
           return true;
       }
